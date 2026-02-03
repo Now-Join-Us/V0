@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V0: A Generalist Value Model</title>
+    <style>
+        :root {
+            --primary-dark: #2E5A2E;
+            --primary-main: #557C55;
+            --primary-light: #8BA888;
+            --accent-green: #D4E7C5;
+            
+            --text-main: #2C3E50;
+            --text-light: #64748B;
+            --bg-body: #FAFAFA;
+            --bg-card: #FFFFFF;
+            
+            --container-width: 1200px;
+            --radius-btn: 50px;
+            --radius-card: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--primary-main);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: var(--primary-dark);
+        }
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 5rem 1.5rem;
+            text-align: center;
+        }
+
+        .header-section {
+            margin-bottom: 3.5rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .paper-title {
+            font-size: 2.8rem;
+            font-weight: 1000;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        .paper-title sub {
+            font-size: 0.6em;
+            vertical-align: baseline;
+            position: relative;
+            top: 0.3em;
+        }
+
+        .author-block {
+            margin-bottom: 1rem;
+            font-size: 1.15rem;
+        }
+
+        .author-name {
+            display: inline-block;
+            margin: 0 6px;
+            font-weight: 500;
+            color: #222;
+        }
+
+        .author-sup {
+            font-size: 0.7em;
+            color: var(--primary-main);
+            font-weight: 600;
+            margin-left: 1px;
+        }
+
+        .author-icon {
+            font-size: 0.7em;
+            color: var(--text-light);
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        .affiliation-block {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .aff-item {
+            margin: 0 10px;
+            display: inline-block;
+        }
+
+        .project-url {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+        .project-url a {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .tagline {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: var(--primary-main);
+            font-weight: 300;
+            font-style: italic;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+            padding: 10px 20px;
+            background: rgba(85, 124, 85, 0.05);
+            border-radius: 8px;
+        }
+        
+        .tagline strong {
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 30px;
+            border-radius: var(--radius-btn);
+            font-weight: 600;
+            font-size: 1rem;
+            color: white !important;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(85, 124, 85, 0.2);
+            text-decoration: none !important;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-icon {
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(85, 124, 85, 0.3);
+        }
+
+        .btn-demo {
+            background: linear-gradient(135deg, #A6CF98 0%, #66BB6A 100%);
+        }
+        .btn-paper {
+            background: linear-gradient(135deg, #557C55 0%, #2E7D32 100%);
+        }
+        .btn-code {
+            background: linear-gradient(135deg, #4DB6AC 0%, #00897B 100%);
+        }
+
+
+        .teaser-container {
+            margin: 2rem 0 3rem 0;
+            background: var(--bg-card);
+            padding: 10px;
+            border-radius: var(--radius-card);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+        }
+        
+        .teaser-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .content-block {
+            text-align: left;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--text-main);
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            background: linear-gradient(90deg, var(--primary-main), var(--secondary-color));
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .text-body {
+            font-size: 1.1rem;
+            text-align: justify;
+            color: #444;
+            max-width: 860px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .math-var {
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+        }
+
+        .bibtex-block {
+            background-color: #F2F5F2;
+            padding: 2rem;
+            border-radius: var(--radius-card);
+            text-align: left;
+            overflow-x: auto;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #383a42;
+            border: 1px solid #e0e8e0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .paper-title { font-size: 2rem; }
+            .button-group { flex-direction: column; width: 100%; }
+            .btn { width: 100%; justify-content: center; box-sizing: border-box; }
+            .tagline { font-size: 1rem; text-align: left; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header-section">
+            <h1 class="paper-title">
+                <span class="math-var">V</span><sub>0</sub>: A Generalist Value Model for Any Policy at State Zero
+            </h1>
+
+            <div class="author-block">
+                <span class="author-name">Yi-Kai Zhang<sup class="author-sup">1,3</sup></span>
+                <span class="author-name">Zhiyuan Yao<sup class="author-sup">2,3</sup></span>
+                <span class="author-name">Hongyan Hao<sup class="author-sup">3</sup></span>
+                <span class="author-name">Yueqing Sun<sup class="author-sup">3</sup></span>
+                <br>
+                <span class="author-name">Qi Gu<sup class="author-sup">3</sup><i class="fa-regular fa-envelope author-icon"></i></span>
+                <span class="author-name">Hui Su<sup class="author-sup">3</sup></span>
+                <span class="author-name">Xunliang Cai<sup class="author-sup">3</sup></span>
+                <span class="author-name">De-Chuan Zhan<sup class="author-sup">1</sup></span>
+                <span class="author-name">Han-Jia Ye<sup class="author-sup">1</sup><i class="fa-regular fa-envelope author-icon"></i></span>
+            </div>
+
+            <div class="affiliation-block">
+                <span class="aff-item"><sup class="author-sup">1</sup>Nanjing University</span>
+                <span class="aff-item"><sup class="author-sup">2</sup>Zhejiang University</span>
+                <span class="aff-item"><sup class="author-sup">3</sup>Meituan, China</span>
+            </div>
+
+            <div class="tagline">
+                <strong>Function:</strong> <span class="math-var">V</span><sub>0</sub> uses a model's historical performance to predict how it will perform on unseen instructions without running the model itself.
+            </div>
+
+            <div class="button-group">
+                <a href="#" class="btn btn-paper">
+                    <span class="btn-icon"><i class="fa-solid fa-file-pdf"></i></span> Paper
+                </a>
+                <a href="#" class="btn btn-paper">
+                    <span class="btn-icon"><i class="fa-brands fa-github"></i></span> Code
+                </a>
+                <a href="#" class="btn btn-demo">
+                    <span class="btn-icon"><i class="fa-solid fa-play"></i></span> Demo
+                </a>
+            </div>
+        </header>
+
+        <div class="teaser-container">
+            <img src="./asset/motivation.png" alt="Motivation" class="teaser-image">
+        </div>
+        
+        <section class="content-block">
+            <h2 class="section-title">Abstract</h2>
+            <p class="text-body">
+                Policy gradient methods rely on a baseline to measure the relative advantage of an action, ensuring the model reinforces behaviors that outperform its current average capability. In the training of Large Language Models (LLMs) using Actor-Critic methods (<i>e.g.</i>, PPO), this baseline is typically estimated by a Value Model (Critic) often as large as the policy model itself. However, as the policy continuously evolves, the value model requires expensive, synchronous incremental training to accurately track the shifting capabilities of the policy. To avoid this overhead, Group Relative Policy Optimization (GRPO) eliminates the coupled value model by using the average reward of a group of rollouts as the baseline; yet, this approach necessitates extensive sampling to maintain estimation stability.
+                In this paper, we propose <span class="math-var">V</span><sub>0</sub>, a Generalist Value Model capable of estimating the expected performance of any model on unseen prompts without requiring parameter updates. We reframe value estimation by treating the policy's dynamic capability as an explicit context input; specifically, we leverage a history of instruction-performance pairs to dynamically profile the model, departing from the traditional paradigm that relies on parameter fitting to perceive capability shifts. Focusing on value estimation at State Zero (<i>i.e.</i>, the initial prompt, hence <span class="math-var">V</span><sub>0</sub>), our model serves as a critical resource scheduler. During GRPO training, <span class="math-var">V</span><sub>0</sub> predicts success rates prior to rollout, allowing for efficient sampling budget allocation; during deployment, it functions as a router, dispatching instructions to the most cost-effective and suitable model. Empirical results demonstrate that <span class="math-var">V</span><sub>0</sub> significantly outperforms heuristic budget allocation and achieves a Pareto-optimal trade-off between performance and cost in LLM routing tasks.
+            </p>
+        </section>
+
+        <section class="content-block">
+            <h2 class="section-title">Method Overview</h2>
+            <div class="teaser-container" style="margin-top: 2rem;">
+                <img src="./asset/method.png" alt="Method Pipeline" class="teaser-image">
+            </div>
+            <p class="text-body" style="text-align: center;">
+                <b>The <span class="math-var">V</span><sub>0</sub> Architecture.</b> A Semantic Backbone extracts embedding <span class="math-var"><b>h</b></span>, which the Residual Query Adapter projects into structured features using queries <span class="math-var"><b>Q</b><sub>static</sub></span> and dynamic <span class="math-var">&Delta;<b>Q</b></span>. After obtaining context <span class="math-var">C</span><sub>&pi;</sub> and query <span class="math-var">x</span>, they are fed into the TabPFN inference head.
+            </p>
+        </section>
+
+        <section class="content-block">
+            <h2 class="section-title">Citation</h2>
+            <div class="bibtex-block">
+<pre>@article{generalist_value_model_v0,
+  author       = {Yi{-}Kai Zhang and
+                  Zhiyuan Yao and
+                  Hongyan Hao and
+                  Yueqing Sun and
+                  Qi Gu and
+                  Hui Su and
+                  Xunliang Cai and
+                  De{-}Chuan Zhan and
+                  Han{-}Jia Ye},
+  title        = {<span class="math-var">V</span><sub>0</sub>: A Generalist Value Model for Any Policy at State Zero},
+  journal      = {CoRR},
+  volume       = {abs/},
+  year         = {2026}
+}</pre>
+            </div>
+        </section>
+
+        <footer style="margin-top: 5rem; color: #999; font-size: 0.9rem; margin-bottom: 2rem;">
+            <p>Copyright © 2026. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+</body>
+</html>
