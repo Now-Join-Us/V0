@@ -1,0 +1,7 @@
+numpy==2.2.6
+scikit_learn==1.7.2
+-e git+https://github.com/PriorLabs/TabPFN.git@2cd2326038e789a26f7a07e70e1ea986ffd040c9#egg=tabpfn
+torch==2.7.1
+tqdm==4.67.1
+transformers==4.55.4
+wandb==0.21.3
