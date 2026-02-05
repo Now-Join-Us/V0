@@ -13,7 +13,7 @@ V<sub>0</sub> is a **Generalist Value Model** designed to predict the expected p
 
 > **Function:** V<sub>0</sub> uses a model's historical performance to predict how it will perform on unseen instructions without running the model itself.
 
-In the context of RLHF and LLM alignment (e.g., PPO or GRPO), value models are typically coupled to a specific policy. V<sub>0</sub> breaks this paradigm by:
+In LLM policy-gradient RL training (*e.g.*, PPO), value models are typically coupled to a specific policy. V<sub>0</sub> reframes this paradigm by:
 * **State Zero Estimation:** Focusing on the initial prompt to predict success rates before generation.
 * **Dynamic Profiling:** Using instruction-performance pairs to perceive capability shifts without retraining.
 * **Resource Scheduling:** Optimizing sampling budgets in GRPO and acting as an intelligent router during deployment.
